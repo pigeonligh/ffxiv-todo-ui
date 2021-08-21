@@ -40,7 +40,7 @@ export default defineComponent({
             data.selected.value = data.views[i];
           }
         }
-      }, 1000);
+      }, 300);
     });
   },
   components: {

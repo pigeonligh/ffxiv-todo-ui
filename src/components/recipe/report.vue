@@ -27,8 +27,8 @@
         <div class="p-col-6">
           <div class="p-inputgroup" width="100%">
             <span class="p-inputgroup-addon">查询</span>
-            <InputText disabled modelValue="123" />
-            <Button label="复制" />
+            <InputText disabled :modelValue="'/isearch ' + items[toggleItem]" />
+            <Button label="复制" @click="copy" />
           </div>
         </div>
         <div class="p-col-6">
@@ -41,7 +41,7 @@
               :max="999999"
               :step="1"
             />
-            <Button label="设置" />
+            <Button label="设置" @click="setInventory" />
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { defineComponent, onUpdated, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import useClipboard from "vue-clipboard3";
 
 import Button from "primevue/button";
@@ -65,6 +65,7 @@ const data = {
   recipes: ref({}),
   stages: ref([]),
   toggleItem: ref(0),
+  inputnumber: ref(0),
 };
 
 const methods = {
@@ -78,12 +79,13 @@ const methods = {
     for (var i = size; i > 0; i--) {
       stages.push(report.stages[i + ""]);
     }
-    console.log(stages);
     data.stages.value = stages;
+    data.inputnumber.value = 0;
   },
 };
 
 export default defineComponent({
+  emits: ["setInventory"],
   props: {
     modelValue: Object,
   },
@@ -91,19 +93,27 @@ export default defineComponent({
   data() {
     return data;
   },
-  setup(props) {
-    onUpdated(() => {
-      methods.show(props.modelValue);
-    });
-  },
+  setup() {},
   methods: {
-    async copy(item) {
+    async copy() {
       const { toClipboard } = useClipboard();
-      await toClipboard(data.items.value[item]);
+      await toClipboard("/isearch " + data.items.value[data.toggleItem.value]);
     },
     click(event, item) {
       this.$refs.op.toggle(event);
       data.toggleItem.value = item;
+    },
+    setInventory() {
+      this.$emit(
+        "setInventory",
+        data.items.value[data.toggleItem.value],
+        data.inputnumber.value
+      );
+    },
+  },
+  watch: {
+    modelValue() {
+      methods.show(this.modelValue);
     },
   },
 });

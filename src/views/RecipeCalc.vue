@@ -11,7 +11,7 @@
         />
       </div>
       <div class="p-col-12 p-sm-10 p-md-8 p-lg-8">
-        <RecipeReport v-model="report" />
+        <RecipeReport v-model="report" @setInventory="setInventory" />
       </div>
     </div>
   </div>
