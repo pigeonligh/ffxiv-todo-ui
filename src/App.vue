@@ -1,23 +1,75 @@
 <template>
-<div>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</div>
+  <div id="nav">
+    <SelectButton
+      v-model="selected"
+      :options="views"
+      optionLabel="name"
+      @click="click(selected.path)"
+    />
+  </div>
+  <router-view />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { defineComponent, onMounted, getCurrentInstance, ref } from "vue";
 
-export default {
-  name: 'App',
+import SelectButton from "primevue/selectbutton";
+
+const data = {
+  selected: ref(null),
+  views: [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+  ],
+};
+
+export default defineComponent({
+  data() {
+    return data;
+  },
+  setup() {
+    onMounted(() => {
+      const { proxy } = getCurrentInstance();
+      setTimeout(() => {
+        const path = proxy.$router.currentRoute.value.path;
+        for (var i in data.views) {
+          if (data.views[i].path == path) {
+            data.selected.value = data.views[i];
+          }
+        }
+      }, 50);
+    });
+  },
   components: {
-    HelloWorld
-  }
-}
+    SelectButton,
+  },
+  methods: {
+    click(path) {
+      this.$router.push(path);
+    },
+  },
+});
 </script>
 
 <style>
 #app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #c1d1e0;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 
 body {
