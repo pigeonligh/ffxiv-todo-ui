@@ -7,7 +7,9 @@
       @click="click(selected.path)"
     />
   </div>
-  <router-view />
+  <div id="main">
+    <router-view />
+  </div>
 </template>
 
 <script>
@@ -18,8 +20,9 @@ import SelectButton from "primevue/selectbutton";
 const data = {
   selected: ref(null),
   views: [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
+    { name: "主页", path: "/" },
+    { name: "配方计算器", path: "/recipe" },
+    { name: "关于", path: "/about" },
   ],
 };
 
@@ -37,7 +40,7 @@ export default defineComponent({
             data.selected.value = data.views[i];
           }
         }
-      }, 50);
+      }, 200);
     });
   },
   components: {
@@ -70,6 +73,10 @@ export default defineComponent({
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+#main {
+  padding: 10px;
 }
 
 body {

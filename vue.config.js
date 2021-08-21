@@ -22,7 +22,7 @@ module.exports = {
         },
         proxy: {
             [process.env.VUE_APP_BASE_API]: {
-                target: `https://ffxiv.pigeonligh.com/api`,
+                target: `https://ffxiv.pigeonligh.com/api/`,
                 changeOrigin: true,
                 pathRewrite: {
                     ['^' + process.env.VUE_APP_BASE_API]: ''
